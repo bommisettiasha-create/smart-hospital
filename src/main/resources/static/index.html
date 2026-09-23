@@ -1,65 +1,23 @@
 <!DOCTYPE html>
-<html>
-<head>
-<title>Smart Hospital - Asha</title>
-<style>
-body{font-family:Arial;background:#e3f2fd;margin:0;padding:20px}
-.container{max-width:900px;margin:auto;background:white;padding:20px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.2)}
-h1{color:#1565c0;text-align:center}
-input,button{padding:10px;margin:5px;border-radius:6px;border:1px solid #ccc}
-button{background:#1565c0;color:white;cursor:pointer;border:none}
-button.delete{background:#e53935}
-#search{width:95%;padding:12px;margin:10px 0;border:2px solid #1565c0}
-table{width:100%;border-collapse:collapse;margin-top:15px}
-th,td{padding:10px;border:1px solid #ddd;text-align:center}
-th{background:#1565c0;color:white}
-</style>
-</head>
-<body>
-<div class="container">
-<h1>🏥 Smart Hospital - Patient Management</h1>
-<p style="text-align:center">Made by Asha 💖</p>
+<html><head><title>Smart Hospital - Asha</title>
+<style>body{font-family:Arial;background:#e3f2fd;margin:0;padding:20px}.container{max-width:1000px;margin:auto;background:white;padding:20px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.2)}h1{color:#1565c0;text-align:center}.tabs{display:flex;justify-content:center;margin:15px} .tab{padding:10px 20px;cursor:pointer;background:#ddd;margin:0 5px;border-radius:6px} .tab.active{background:#1565c0;color:white} input,button{padding:10px;margin:5px;border-radius:6px;border:1px solid #ccc} button{background:#1565c0;color:white;border:none;cursor:pointer} button.delete{background:#e53935} table{width:100%;border-collapse:collapse;margin-top:15px} th,td{padding:10px;border:1px solid #ddd;text-align:center} th{background:#1565c0;color:white} .section{display:none} .section.active{display:block}</style></head><body><div class="container"><h1>🏥 Smart Hospital - Made by Asha 💖</h1><div class="tabs"><div class="tab active" onclick="showTab('patient')">Patients</div><div class="tab" onclick="showTab('doctor')">Doctors</div></div>
 
-<input id="search" type="text" placeholder="🔍 Search patient by name..." onkeyup="searchPatient()">
+<div id="patientSection" class="section active">
+<input id="searchP" placeholder="🔍 Search Patient..." onkeyup="searchP()" style="width:95%;border:2px solid #1565c0"><h3>Add Patient</h3><input id="pname" placeholder="Name"><input id="page" placeholder="Age" type="number"><input id="pdisease" placeholder="Disease"><button onclick="addPatient()">Add</button><table id="patientTable"></table></div>
 
-<h3>Add New Patient</h3>
-<input id="name" placeholder="Name">
-<input id="age" placeholder="Age" type="number">
-<input id="disease" placeholder="Disease">
-<button onclick="addPatient()">Add Patient</button>
-
-<table id="patientTable">
-<tr><th>ID</th><th>Name</th><th>Age</th><th>Disease</th><th>Action</th></tr>
-</table>
+<div id="doctorSection" class="section">
+<input id="searchD" placeholder="🔍 Search Doctor..." onkeyup="searchD()" style="width:95%;border:2px solid #1565c0"><h3>Add Doctor</h3><input id="dname" placeholder="Doctor Name"><input id="dspec" placeholder="Specialization (ex: Cardiologist)"><button onclick="addDoctor()">Add Doctor</button><table id="doctorTable"></table></div>
 </div>
 
 <script>
-let allPatients = [];
-function loadPatients(){
- fetch('/patients').then(r=>r.json()).then(data=>{
-   allPatients=data; display(data);
- });
-}
-function display(data){
- let t='<tr><th>ID</th><th>Name</th><th>Age</th><th>Disease</th><th>Action</th></tr>';
- data.forEach(p=>{
-  t+=`<tr><td>${p.id}</td><td>${p.name}</td><td>${p.age}</td><td>${p.disease}</td><td><button class="delete" onclick="deletePatient(${p.id})">Delete</button></td></tr>`;
- });
- document.getElementById('patientTable').innerHTML=t;
-}
-function addPatient(){
- const p={name:document.getElementById('name').value, age:document.getElementById('age').value, disease:document.getElementById('disease').value};
- fetch('/patients',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}).then(()=>{loadPatients(); document.getElementById('name').value=''; document.getElementById('age').value=''; document.getElementById('disease').value='';});
-}
-function deletePatient(id){
- if(confirm('Delete this patient?')){ fetch('/patients/'+id,{method:'DELETE'}).then(()=>loadPatients()); }
-}
-function searchPatient(){
- let q=document.getElementById('search').value.toLowerCase();
- let filtered=allPatients.filter(p=>p.name.toLowerCase().includes(q));
- display(filtered);
-}
-loadPatients();
-</script>
-</body>
-</html>
+let allP=[], allD=[];
+function showTab(t){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(s=>s.classList.remove('active'));if(t=='patient'){document.getElementById('patientSection').classList.add('active');event.target.classList.add('active')}else{document.getElementById('doctorSection').classList.add('active');event.target.classList.add('active')}}
+function loadPatients(){fetch('/patients').then(r=>r.json()).then(d=>{allP=d;displayP(d)})} function displayP(data){let t='<tr><th>ID</th><th>Name</th><th>Age</th><th>Disease</th><th>Action</th></tr>';data.forEach(p=>{t+=`<tr><td>${p.id}</td><td>${p.name}</td><td>${p.age}</td><td>${p.disease}</td><td><button class=delete onclick=deletePatient(${p.id})>Delete</button></td></tr>`});document.getElementById('patientTable').innerHTML=t}
+function addPatient(){const p={name:document.getElementById('pname').value,age:document.getElementById('page').value,disease:document.getElementById('pdisease').value};fetch('/patients',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}).then(()=>{loadPatients();pname.value='';page.value='';pdisease.value=''})}
+function deletePatient(id){if(confirm('Delete?'))fetch('/patients/'+id,{method:'DELETE'}).then(()=>loadPatients())} function searchP(){let q=document.getElementById('searchP').value.toLowerCase();displayP(allP.filter(p=>p.name.toLowerCase().includes(q)))}
+
+function loadDoctors(){fetch('/doctors').then(r=>r.json()).then(d=>{allD=d;displayD(d)})} function displayD(data){let t='<tr><th>ID</th><th>Name</th><th>Specialization</th><th>Action</th></tr>';data.forEach(d=>{t+=`<tr><td>${d.id}</td><td>${d.name}</td><td>${d.specialization}</td><td><button class=delete onclick=deleteDoctor(${d.id})>Delete</button></td></tr>`});document.getElementById('doctorTable').innerHTML=t}
+function addDoctor(){const d={name:document.getElementById('dname').value,specialization:document.getElementById('dspec').value};fetch('/doctors',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}).then(()=>{loadDoctors();dname.value='';dspec.value=''})}
+function deleteDoctor(id){if(confirm('Delete?'))fetch('/doctors/'+id,{method:'DELETE'}).then(()=>loadDoctors())} function searchD(){let q=document.getElementById('searchD').value.toLowerCase();displayD(allD.filter(d=>d.name.toLowerCase().includes(q)))}
+loadPatients();loadDoctors();
+</script></body></html>
