@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 public class PatientController {
 
     @Autowired
@@ -18,5 +19,10 @@ public class PatientController {
     @PostMapping("/patients")
     public Patient addPatient(@RequestBody Patient patient) {
         return repo.save(patient);
+    }
+
+    @DeleteMapping("/patients/{id}")
+    public void deletePatient(@PathVariable Long id) {
+        repo.deleteById(id);
     }
 }

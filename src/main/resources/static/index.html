@@ -1,57 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Smart Hospital - Asha Project</title>
+<title>Smart Hospital - Asha</title>
 <style>
-body { font-family: Arial; background: #f0f8ff; padding: 20px; }
-.card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 800px; margin: auto; }
-h1 { color: #0077cc; text-align: center; }
-input { padding: 10px; margin: 5px; border-radius: 8px; border: 1px solid #ccc; width: 22%; }
-button { padding: 10px 20px; background: #0077cc; color: white; border: none; border-radius: 8px; cursor: pointer; }
-button:hover { background: #005fa3; }
-table { width: 100%; margin-top: 20px; border-collapse: collapse; }
-th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; }
-th { background: #0077cc; color: white; }
+body{font-family:Arial;background:#e3f2fd;margin:0;padding:20px}
+.container{max-width:900px;margin:auto;background:white;padding:20px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.2)}
+h1{color:#1565c0;text-align:center}
+input,button{padding:10px;margin:5px;border-radius:6px;border:1px solid #ccc}
+button{background:#1565c0;color:white;cursor:pointer;border:none}
+button.delete{background:#e53935}
+#search{width:95%;padding:12px;margin:10px 0;border:2px solid #1565c0}
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{padding:10px;border:1px solid #ddd;text-align:center}
+th{background:#1565c0;color:white}
 </style>
 </head>
 <body>
-<div class="card">
+<div class="container">
 <h1>🏥 Smart Hospital - Patient Management</h1>
-<h3>Add Patient</h3>
-<input id="name" placeholder="Name">
-<input id="age" type="number" placeholder="Age">
-<input id="disease" placeholder="Disease">
-<input id="phone" placeholder="Phone">
-<button onclick="addPatient()">Add</button>
+<p style="text-align:center">Made by Asha 💖</p>
 
-<h3>Patients List</h3>
-<button onclick="loadPatients()">🔄 Refresh List</button>
-<table id="table">
-<tr><th>ID</th><th>Name</th><th>Age</th><th>Disease</th><th>Phone</th></tr>
+<input id="search" type="text" placeholder="🔍 Search patient by name..." onkeyup="searchPatient()">
+
+<h3>Add New Patient</h3>
+<input id="name" placeholder="Name">
+<input id="age" placeholder="Age" type="number">
+<input id="disease" placeholder="Disease">
+<button onclick="addPatient()">Add Patient</button>
+
+<table id="patientTable">
+<tr><th>ID</th><th>Name</th><th>Age</th><th>Disease</th><th>Action</th></tr>
 </table>
-<p style="text-align:center; color: gray;">Made by Asha ❤️</p>
 </div>
 
 <script>
-async function loadPatients(){
- let res = await fetch('/patients');
- let data = await res.json();
- let table = document.getElementById('table');
- table.innerHTML = "<tr><th>ID</th><th>Name</th><th>Age</th><th>Disease</th><th>Phone</th></tr>";
- data.forEach(p => {
-   table.innerHTML += `<tr><td>${p.id}</td><td>${p.name}</td><td>${p.age}</td><td>${p.disease}</td><td>${p.phone||''}</td></tr>`;
+let allPatients = [];
+function loadPatients(){
+ fetch('/patients').then(r=>r.json()).then(data=>{
+   allPatients=data; display(data);
  });
 }
-async function addPatient(){
- let body = {
-   name: document.getElementById('name').value,
-   age: parseInt(document.getElementById('age').value),
-   disease: document.getElementById('disease').value,
-   phone: document.getElementById('phone').value
- };
- await fetch('/patients', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
- alert('Patient Added!');
- loadPatients();
+function display(data){
+ let t='<tr><th>ID</th><th>Name</th><th>Age</th><th>Disease</th><th>Action</th></tr>';
+ data.forEach(p=>{
+  t+=`<tr><td>${p.id}</td><td>${p.name}</td><td>${p.age}</td><td>${p.disease}</td><td><button class="delete" onclick="deletePatient(${p.id})">Delete</button></td></tr>`;
+ });
+ document.getElementById('patientTable').innerHTML=t;
+}
+function addPatient(){
+ const p={name:document.getElementById('name').value, age:document.getElementById('age').value, disease:document.getElementById('disease').value};
+ fetch('/patients',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}).then(()=>{loadPatients(); document.getElementById('name').value=''; document.getElementById('age').value=''; document.getElementById('disease').value='';});
+}
+function deletePatient(id){
+ if(confirm('Delete this patient?')){ fetch('/patients/'+id,{method:'DELETE'}).then(()=>loadPatients()); }
+}
+function searchPatient(){
+ let q=document.getElementById('search').value.toLowerCase();
+ let filtered=allPatients.filter(p=>p.name.toLowerCase().includes(q));
+ display(filtered);
 }
 loadPatients();
 </script>
