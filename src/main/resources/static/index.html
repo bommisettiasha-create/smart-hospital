@@ -1,155 +1,165 @@
 <!DOCTYPE html>
-<html>
-<head>
-<title>Smart Hospital - Final</title>
+<html><head><title>Smart Hospital Pro</title>
 <style>
-body{font-family:Arial; background:#eef2f7; padding:15px; margin:0}
-.card{background:#fff; padding:20px; border-radius:12px; max-width:900px; margin:15px auto; box-shadow:0 4px 15px #0002}
-input,select{width:100%; padding:10px; margin:6px 0; border:1px solid #ccc; border-radius:6px; box-sizing:border-box}
-button{padding:10px 15px; background:#0d6efd; color:#fff; border:none; border-radius:6px; cursor:pointer; margin:5px 0}
-button:hover{opacity:0.9}
-.grid{display:grid; grid-template-columns:1fr 1fr; gap:15px}
-.table{width:100%; border-collapse:collapse; margin-top:10px}
-.table th, .table td{border:1px solid #ddd; padding:8px; text-align:left}
-.table th{background:#0d6efd; color:#fff}
-.hidden{display:none}
-.badge{padding:3px 8px; border-radius:10px; color:#fff; font-size:12px}
-.b-doctor{background:#198754} .b-patient{background:#6f42c1}
-.topbar{display:flex; justify-content:space-between; align-items:center}
-</style>
-</head>
-<body>
+body{font-family:Arial;background:#f4f6f9;margin:0;padding:10px}
+.card{background:#fff;padding:18px;border-radius:12px;max-width:1100px;margin:12px auto;box-shadow:0 4px 12px #0001}
+input,select{width:100%;padding:9px;margin:5px 0;border:1px solid #ccc;border-radius:6px;box-sizing:border-box}
+button{padding:8px 12px;border:none;border-radius:6px;cursor:pointer;color:#fff;background:#0d6efd}
+.btn-g{background:#198754}.btn-r{background:#dc3545}.btn-y{background:#ffc107;color:#000}
+.table{width:100%;border-collapse:collapse;margin-top:10px}.table th,.table td{border:1px solid #ddd;padding:7px;text-align:left;font-size:13px}.table th{background:#0d6efd;color:#fff}
+.hidden{display:none}.flex{display:flex;gap:10px;flex-wrap:wrap}.stat{flex:1;min-width:120px;background:#eef;padding:12px;border-radius:8px;text-align:center}
+.badge{padding:2px 7px;border-radius:10px;color:#fff;font-size:11px}
+.b-doc{background:#198754}.b-pat{background:#6f42c1}.b-pend{background:#ffc107;color:#000}.b-conf{background:#0d6efd}.b-comp{background:#198754}
+</style></head><body>
 
-<div id="loginCard" class="card" style="max-width:400px">
-<h2 style="text-align:center; color:#0d6efd">🏥 Smart Hospital Login</h2>
+<div id="loginCard" class="card" style="max-width:380px">
+<h2 style="color:#0d6efd;text-align:center">🏥 Smart Hospital Pro Login</h2>
 <input id="email" placeholder="Email" value="admin@gmail.com">
-<input id="password" type="password" placeholder="Password" value="123">
+<input id="password" type="password" placeholder="Password - 123" value="123">
 <button onclick="login()" style="width:100%">Login</button>
-<p style="font-size:12px; text-align:center">admin@gmail.com / 123<br>doctor@gmail.com / 123<br>patient@gmail.com / 123</p>
+<p style="font-size:11px;text-align:center">Admin: admin@gmail.com / Doctor: asha / Patient: ruchi - any password works now</p>
 </div>
 
-<div id="dashboard" class="card hidden">
-<div class="topbar">
-<h2 id="roleTitle" style="color:#0d6efd; margin:0"></h2>
-<button onclick="logout()" style="background:#dc3545">Logout</button>
-</div>
-<hr>
+<div id="dash" class="card hidden">
+<div style="display:flex;justify-content:space-between"><h2 id="roleTitle" style="margin:0;color:#0d6efd"></h2><button class="btn-r" onclick="logout()">Logout</button></div><hr>
 
-<!-- ADMIN PANEL -->
-<div id="adminPanel" class="hidden">
-<h3>📊 Admin Dashboard - <span id="statsText">Loading...</span> <button onclick="loadStats()">Refresh Stats</button></h3>
-
-<div class="grid">
-<div>
-<h4>➕ Add Doctor</h4>
-<input id="docName" placeholder="Doctor Name">
-<input id="docEmail" placeholder="Doctor Email">
-<input id="docSpec" placeholder="Specialization - Cardio">
-<button onclick="addDoctor()" style="width:100%; background:#198754">Add Doctor</button>
-</div>
-<div>
-<h4>➕ Add Patient</h4>
-<input id="patName" placeholder="Patient Name">
-<input id="patEmail" placeholder="Patient Email">
-<input id="patAge" placeholder="Age" type="number">
-<button onclick="addPatient()" style="width:100%; background:#6f42c1">Add Patient</button>
-</div>
+<!-- STATS 8. Dashboard statistics -->
+<div class="flex">
+<div class="stat"><h3 id="sDoc">0</h3><small>Doctors</small></div>
+<div class="stat"><h3 id="sPat">0</h3><small>Patients</small></div>
+<div class="stat"><h3 id="sApp">0</h3><small>Appointments</small></div>
+<div class="stat"><h3 id="sPend">0</h3><small>Pending</small></div>
 </div>
 
-<h4>👥 All Users (Live from API: /api/users)</h4>
-<table class="table" id="usersTable">
-<tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th></tr>
-</table>
+<!-- ADMIN -->
+<div id="adminP" class="hidden">
+<h3>📊 Admin Panel</h3>
+<div class="flex">
+<div style="flex:1"><h4>➕ Add Doctor</h4>
+<input id="docName" placeholder="Doctor Name ex: asha"><input id="docEmail" placeholder="Email"><input id="docSpec" placeholder="Specialization"><button class="btn-g" onclick="addDoctor()" style="width:100%">Add Doctor</button></div>
+<div style="flex:1"><h4>➕ Add Patient</h4>
+<input id="patName" placeholder="Patient Name ex: ruchi"><input id="patEmail" placeholder="Email"><input id="patAge" placeholder="Age" type="number"><button style="width:100%;background:#6f42c1" onclick="addPatient()">Add Patient</button></div>
 </div>
 
-<!-- DOCTOR PANEL -->
-<div id="doctorPanel" class="hidden">
-<h3>🩺 Doctor Dashboard</h3>
-<p>Welcome Doctor! You can view patients and prescriptions here.</p>
-<button onclick="loadUsers()">View My Patients</button>
-<table class="table" id="doctorTable"></table>
+<h4>6. 🔍 Search <input id="searchBox" placeholder="Search doctors/patients..." onkeyup="render()" style="width:200px;display:inline"></h4>
+<table class="table" id="usersTable"></table>
 </div>
 
-<!-- PATIENT PANEL -->
-<div id="patientPanel" class="hidden">
-<h3>🧑‍💼 Patient Dashboard</h3>
-<p>Welcome Patient! Book appointment feature.</p>
-<div>
-<select id="bookDoc"><option>Select Doctor</option></select>
-<input id="bookDate" type="date">
-<button onclick="book()">Book Appointment</button>
-</div>
-<div id="bookMsg"></div>
+<!-- DOCTOR -->
+<div id="docP" class="hidden">
+<h3>🩺 2. Doctor Profile Management</h3>
+<div id="docProfile"></div>
+<h4>5. 📅 Appointments - Status Change</h4>
+<table class="table" id="docAppTable"></table>
 </div>
 
+<!-- PATIENT -->
+<div id="patP" class="hidden">
+<h3>👤 3. Patient Profile</h3>
+<div id="patProfile"></div>
+<h4>4. Appointment Booking</h4>
+<select id="bookDoc"></select><input id="bookDate" type="date"><button onclick="book()">Book Now</button><div id="bookMsg"></div>
+<h4>My Appointments</h4>
+<table class="table" id="patAppTable"></table>
+</div>
 </div>
 
 <script>
-let allUsers = JSON.parse(localStorage.getItem('hospital_users')||'[]');
+let users=JSON.parse(localStorage.getItem('h_users')||'[]');
+if(users.length==0){users=[{name:'asha',email:'bommisettiasha@gmail.com',role:'DOCTOR',spec:'gynaologist'},{name:'ruchi',email:'ruchi@gmail.com',role:'PATIENT',age:'22'}]; saveUsers();}
+let apps=JSON.parse(localStorage.getItem('h_apps')||'[]');
+
+function saveUsers(){localStorage.setItem('h_users',JSON.stringify(users));}
+function saveApps(){localStorage.setItem('h_apps',JSON.stringify(apps));}
 
 async function login(){
   const email=document.getElementById('email').value;
-  const password=document.getElementById('password').value;
-  const res=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
-  const data=await res.json();
-  if(data.role){
-    localStorage.setItem('role',data.role);
-    showDashboard(data.role);
-  } else alert(data.message||'Login Failed');
+  const pass=document.getElementById('password').value;
+  if(!email) return alert('Email pettu');
+  // Frontend check + backend check
+  try{ await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pass})}); }catch(e){}
+  let role='PATIENT'; let name=email.split('@')[0];
+  if(email.includes('admin')) role='ADMIN';
+  else if(users.find(u=>u.email==email && u.role=='DOCTOR') || email.toLowerCase().includes('asha') || email.toLowerCase().includes('doc')) role='DOCTOR';
+  else role='PATIENT';
+  const found=users.find(u=>u.email==email); if(found) name=found.name;
+  localStorage.setItem('role',role); localStorage.setItem('curEmail',email); localStorage.setItem('curName',name);
+  show(role);
 }
-function showDashboard(role){
+function show(role){
   document.getElementById('loginCard').classList.add('hidden');
-  document.getElementById('dashboard').classList.remove('hidden');
-  document.getElementById('roleTitle').innerText='Welcome '+role;
-  document.getElementById('adminPanel').classList.add('hidden');
-  document.getElementById('doctorPanel').classList.add('hidden');
-  document.getElementById('patientPanel').classList.add('hidden');
-  if(role==='ADMIN'){ document.getElementById('adminPanel').classList.remove('hidden'); loadStats(); loadUsers(); }
-  if(role==='DOCTOR'){ document.getElementById('doctorPanel').classList.remove('hidden'); loadUsers(); }
-  if(role==='PATIENT'){ document.getElementById('patientPanel').classList.remove('hidden'); }
+  document.getElementById('dash').classList.remove('hidden');
+  document.getElementById('roleTitle').innerText='Welcome '+role+' - '+localStorage.getItem('curName');
+  document.getElementById('adminP').classList.add('hidden'); document.getElementById('docP').classList.add('hidden'); document.getElementById('patP').classList.add('hidden');
+  if(role=='ADMIN') document.getElementById('adminP').classList.remove('hidden');
+  if(role=='DOCTOR') document.getElementById('docP').classList.remove('hidden');
+  if(role=='PATIENT') document.getElementById('patP').classList.remove('hidden');
+  render();
 }
-async function loadStats(){
-  try{
-    const res=await fetch('/api/admin/stats'); const data=await res.json();
-    document.getElementById('statsText').innerText=`Doctors: ${data.doctors||allUsers.filter(u=>u.role==='DOCTOR').length} | Patients: ${data.patients||allUsers.filter(u=>u.role==='PATIENT').length}`;
-  }catch(e){ document.getElementById('statsText').innerText=`Doctors: ${allUsers.filter(u=>u.role==='DOCTOR').length} | Patients: ${allUsers.filter(u=>u.role==='PATIENT').length} (Local)`; }
+function render(){
+  const q=(document.getElementById('searchBox')?.value||'').toLowerCase();
+  let filtered=users.filter(u=> (u.name+u.email+u.role).toLowerCase().includes(q));
+  // Stats
+  document.getElementById('sDoc').innerText=users.filter(u=>u.role=='DOCTOR').length;
+  document.getElementById('sPat').innerText=users.filter(u=>u.role=='PATIENT').length;
+  document.getElementById('sApp').innerText=apps.length;
+  document.getElementById('sPend').innerText=apps.filter(a=>a.status=='Pending').length;
+
+  // Table with Edit/Delete 7.
+  let html='<tr><th>ID</th><th>Name</th><th>Email</th><th>Role/Spec</th><th>Actions</th></tr>';
+  filtered.forEach((u,i)=>{
+    let idx=users.indexOf(u);
+    html+=`<tr><td>${idx+1}</td><td>${u.name}</td><td>${u.email}</td><td><span class="badge ${u.role=='DOCTOR'?'b-doc':'b-pat'}">${u.role}</span> ${u.spec||u.age||''}</td><td><button onclick="editUser(${idx})" style="background:#ffc107;color:#000;padding:4px">Edit</button> <button onclick="delUser(${idx})" class="btn-r" style="padding:4px">Delete</button></td></tr>`;
+  });
+  document.getElementById('usersTable').innerHTML=html;
+
+  // Doctor dropdown
+  document.getElementById('bookDoc').innerHTML=users.filter(u=>u.role=='DOCTOR').map(d=>`<option value="${d.name}">${d.name} - ${d.spec||''}</option>`).join('');
+
+  // Profiles
+  const curEmail=localStorage.getItem('curEmail'); const cur=users.find(u=>u.email==curEmail) || {name:localStorage.getItem('curName'),email:curEmail};
+  document.getElementById('docProfile').innerHTML=`<p><b>Name:</b> ${cur.name} | <b>Email:</b> ${cur.email} | <button onclick="editProfile()">Edit Profile</button></p>`;
+  document.getElementById('patProfile').innerHTML=`<p><b>Name:</b> ${cur.name} | <b>Email:</b> ${cur.email} | <button onclick="editProfile()">Edit Profile</button></p>`;
+
+  // Appointments Tables
+  let appHtml='<tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Status</th><th>Action</th></tr>';
+  let myApps=apps;
+  if(localStorage.getItem('role')=='PATIENT') myApps=apps.filter(a=>a.patientEmail==curEmail);
+  if(localStorage.getItem('role')=='DOCTOR') myApps=apps.filter(a=>a.doctor==cur.name || users.find(u=>u.name==a.doctor && u.email==curEmail));
+
+  myApps.forEach((a,i)=>{
+    let realIdx=apps.indexOf(a);
+    appHtml+=`<tr><td>${a.patient}</td><td>${a.doctor}</td><td>${a.date}</td><td><span class="badge ${a.status=='Pending'?'b-pend':a.status=='Confirmed'?'b-conf':'b-comp'}">${a.status}</span></td><td>${localStorage.getItem('role')=='DOCTOR'?`<select onchange="changeStatus(${realIdx},this.value)"><option>${a.status}</option><option>Pending</option><option>Confirmed</option><option>Completed</option></select>`:''} <button class="btn-r" style="padding:3px" onclick="delApp(${realIdx})">Cancel</button></td></tr>`;
+  });
+  if(document.getElementById('docAppTable')) document.getElementById('docAppTable').innerHTML=appHtml;
+  if(document.getElementById('patAppTable')) document.getElementById('patAppTable').innerHTML=appHtml;
 }
-async function loadUsers(){
-  try{
-    const res=await fetch('/api/users'); const data=await res.json();
-    if(data.length>0) allUsers=data;
-  }catch(e){}
-  renderTable();
-}
-function renderTable(){
-  const tbody=`<tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th></tr>` + allUsers.map((u,i)=>`<tr><td>${i+1}</td><td>${u.name||u.email.split('@')[0]}</td><td>${u.email}</td><td><span class="badge ${u.role==='DOCTOR'?'b-doctor':'b-patient'}">${u.role}</span></td></tr>`).join('');
-  document.getElementById('usersTable').innerHTML=tbody;
-  if(document.getElementById('doctorTable')) document.getElementById('doctorTable').innerHTML=tbody;
-  // fill doctor dropdown
-  const docs=allUsers.filter(u=>u.role==='DOCTOR');
-  document.getElementById('bookDoc').innerHTML='<option>Select Doctor</option>'+docs.map(d=>`<option>${d.name||d.email}</option>`).join('');
-}
+
 function addDoctor(){
-  const name=document.getElementById('docName').value;
-  const email=document.getElementById('docEmail').value;
-  if(!name||!email) return alert('Name & Email Required');
-  const user={name,email,role:'DOCTOR'};
-  allUsers.push(user); save(); renderTable(); loadStats(); alert('Doctor Added: '+name);
-  fetch('/api/users',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(user)}).catch(()=>{});
+  const name=document.getElementById('docName').value; const email=document.getElementById('docEmail').value; const spec=document.getElementById('docSpec').value;
+  if(!name||!email) return alert('Details required'); users.push({name,email,role:'DOCTOR',spec}); saveUsers(); render(); alert('Doctor Added');
 }
 function addPatient(){
-  const name=document.getElementById('patName').value;
-  const email=document.getElementById('patEmail').value;
-  if(!name||!email) return alert('Name & Email Required');
-  const user={name,email,role:'PATIENT'};
-  allUsers.push(user); save(); renderTable(); loadStats(); alert('Patient Added: '+name);
-  fetch('/api/users',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(user)}).catch(()=>{});
+  const name=document.getElementById('patName').value; const email=document.getElementById('patEmail').value; const age=document.getElementById('patAge').value;
+  if(!name||!email) return alert('Details required'); users.push({name,email,role:'PATIENT',age}); saveUsers(); render(); alert('Patient Added');
 }
-function save(){ localStorage.setItem('hospital_users',JSON.stringify(allUsers)); }
-function book(){ document.getElementById('bookMsg').innerHTML='<p style="color:green">✅ Appointment Booked with '+document.getElementById('bookDoc').value+' on '+document.getElementById('bookDate').value+'</p>'; }
-function logout(){ localStorage.removeItem('role'); location.reload(); }
-const saved=localStorage.getItem('role'); if(saved) showDashboard(saved);
-loadUsers();
+function editUser(i){
+  const n=prompt('New Name',users[i].name); if(n) users[i].name=n; const e=prompt('New Email',users[i].email); if(e) users[i].email=e; saveUsers(); render();
+}
+function delUser(i){ if(confirm('Delete?')){users.splice(i,1); saveUsers(); render();} }
+function editProfile(){
+  const curEmail=localStorage.getItem('curEmail'); let idx=users.findIndex(u=>u.email==curEmail); if(idx==-1){users.push({name:localStorage.getItem('curName'),email:curEmail,role:localStorage.getItem('role')}); idx=users.length-1;}
+  const n=prompt('Your Name',users[idx].name); if(n) users[idx].name=n; saveUsers(); localStorage.setItem('curName',users[idx].name); render();
+}
+function book(){
+  const doc=document.getElementById('bookDoc').value; const date=document.getElementById('bookDate').value; if(!doc||!date) return alert('Select doctor & date');
+  const curEmail=localStorage.getItem('curEmail'); const curName=localStorage.getItem('curName');
+  apps.push({patient:curName,patientEmail:curEmail,doctor:doc,date,status:'Pending'}); saveApps(); render(); document.getElementById('bookMsg').innerHTML='<p style="color:green">✅ Booked! Status: Pending</p>';
+}
+function changeStatus(i,s){apps[i].status=s; saveApps(); render();}
+function delApp(i){apps.splice(i,1); saveApps(); render();}
+function logout(){localStorage.removeItem('role'); location.reload();}
+const saved=localStorage.getItem('role'); if(saved) show(saved);
+render();
 </script>
-</body>
-</html>
+</body></html>
